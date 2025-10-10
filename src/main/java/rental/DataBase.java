@@ -1,10 +1,13 @@
 package rental;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +21,9 @@ public final class DataBase {
         enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
     }};
 
-
+    private List<Client> clients= new ArrayList<>();
+    private List<Car> cars= new ArrayList<>();
+    private List<Rental> rentals= new ArrayList<>();
 
     //Singleton конструктор
     private DataBase() {
@@ -35,12 +40,38 @@ public final class DataBase {
 
     //Завантаження "БД" з Json
     public void loadData(){
-        //Завантаження клієнтів
-        ClientRepository.loadData();
-        //Завантаження автівок
-        CarRepository.loadData();
-        //Завантаження оренд
-        RentlaRepository.loadData();
+        try {
+            //Завантаження користувачів
+            File ClientJson = new File(Path.CLIENTS.getPath());
+            if (ClientJson.exists()){
+                clients = mapper.readValue(ClientJson, new TypeReference<>() {});
+                System.out.println("Користувачі успішно завантажені ("+clients.size()+")");
+            }else {
+                System.out.println("file doesn't exist");
+            }
+
+            //Завантаження автівок
+            File CarJson = new File(Path.CARS.getPath());
+            if (CarJson.exists()){
+                cars = mapper.readValue(CarJson, new TypeReference<>() {});
+                System.out.println("Автівки успішно завантажені ("+cars.size()+")");
+            }else {
+                System.out.println("file doesn't exist");
+            }
+
+            //Завантаження оренд
+            File RentalsJson = new File(Path.RENTALS.getPath());
+            if (RentalsJson.exists()){
+                rentals = mapper.readValue(RentalsJson, new TypeReference<>() {
+                });
+                System.out.println("Оренди успішно завантажені ("+rentals.size()+")");
+            }else {
+                System.out.println("file doesn't exist");
+            }
+        } catch (IOException e) {
+            System.out.println("Критична помилка при завантаженні даних: " + e.getMessage());
+            System.exit(0);
+        }
 
         //І, нарешті, синхронізація посилань
         syncReferences();
@@ -49,22 +80,22 @@ public final class DataBase {
     //Синхронізація посилань між класами
     public void syncReferences(){
         //Очищення посилань для всіх клієнтів та авто
-        for (Client client : getClients()) {
+        for (Client client : clients) {
             client.getRentals().clear();
             client.getRentalIds().clear();
         }
-        for (Car car : getCars()) {
+        for (Car car : cars) {
             car.setRentals(new ArrayList<>());
         }
 
         //Основна частина
-        for (Rental rental : RentlaRepository.getRentals()) {
+        for (Rental rental : rentals) {
             String clientId = rental.getClientId();
             String carId = rental.getCarId();
 
             //Відновлення посилання на клієнта
             if (clientId != null) {
-                for (Client client : ClientRepository.getClients()) {
+                for (Client client : clients) {
                     if (clientId.equals(client.getId())) {
                         rental.setClient(client);
                         break;
@@ -74,7 +105,7 @@ public final class DataBase {
 
             //Відновлення посилання на авто
             if (carId != null) {
-                for (Car car : CarRepository.getCars()) {
+                for (Car car : cars) {
                     if (carId.equals(car.getId())) {
                         rental.setCar(car);
                         break;
@@ -84,13 +115,13 @@ public final class DataBase {
         }
 
         //Відновлення посилань з клієнтів та авто на оренди
-        for (Client client : ClientRepository.getClients()) {
-            client.updateRentalReferences(RentlaRepository.getRentals());
+        for (Client client : clients) {
+            client.updateRentalReferences(rentals);
         }
 
-        for (Car car : CarRepository.getCars()) {
+        for (Car car : cars) {
             List<Rental> carRentals = new ArrayList<>();
-            for (Rental rental : RentlaRepository.getRentals()) {
+            for (Rental rental : rentals) {
                 if (car.getId().equals(rental.getCarId())) {
                     carRentals.add(rental);
                 }
@@ -101,19 +132,40 @@ public final class DataBase {
         System.out.println("Синхронізація посилань проведена успішно!");
     }
 
-    //Збереження
+    //Збереження відповідно
     public void saveData(){
-        //Збереження клієнтів
-        ClientRepository.saveData();
+        //Створіть директорію, якщо її немає
+        new File("src/data").mkdirs();
+
+        //Збереження користувачів
+        try{
+            mapper.writeValue(new File(Path.CLIENTS.getPath()), clients);
+            System.out.println("Вдале збереження користувачів!");
+        } catch (IOException e){
+            System.out.println("Помилка збереження користувачів: " + e.getMessage());
+        }
+
         //Збереження автівок
-        CarRepository.saveData();
+        try{
+            mapper.writeValue(new File(Path.CARS.getPath()), cars);
+            System.out.println("Вдале збереження автівок!");
+        } catch (IOException e){
+            System.out.println("Помилка збереження автівок: " + e.getMessage());
+        }
+
         //Збереження оренд
-        RentlaRepository.saveData();
+        try{
+            mapper.writeValue(new File(Path.RENTALS.getPath()), rentals);
+            System.out.println("Вдале збереження оренд!");
+        } catch (IOException e){
+            System.out.println("Помилка збереження оренд: " + e.getMessage());
+        }
+
     }
 
-    public static List<Client> getClients(){return ClientRepository.getClients();}
-    public static List<Car> getCars(){return CarRepository.getCars();}
-    public static List<Rental> getRentals(){return RentlaRepository.getRentals();}
+    public List<Client> getClients(){return clients;}
+    public List<Car> getCars(){return cars;}
+    public List<Rental> getRentals(){return rentals;}
 
-    public boolean isDataSetEmpty(){return getClients().isEmpty() ||getCars().isEmpty() || getRentals().isEmpty();}
+    public boolean isDataSetEmpty(){return clients.isEmpty() || cars.isEmpty() || rentals.isEmpty();}
 }
