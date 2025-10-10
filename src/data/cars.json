@@ -1,0 +1,29 @@
+[ {
+  "id" : "CAR1",
+  "brand" : "Toyota",
+  "model" : "Camry",
+  "year" : 2022,
+  "mileage" : 15000,
+  "pricePerDay" : 25.5
+}, {
+  "id" : "CAR4",
+  "brand" : "Skoda",
+  "model" : "Octavia",
+  "year" : 2020,
+  "mileage" : 35000,
+  "pricePerDay" : 18.5
+}, {
+  "id" : "CAR5",
+  "brand" : "Audi",
+  "model" : "A4",
+  "year" : 2022,
+  "mileage" : 12000,
+  "pricePerDay" : 32.0
+}, {
+  "id" : "CAR6",
+  "brand" : "Renault",
+  "model" : "Duster",
+  "year" : 2009,
+  "mileage" : 12500,
+  "pricePerDay" : 57.83
+} ]

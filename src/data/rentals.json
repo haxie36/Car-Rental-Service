@@ -1,0 +1,15 @@
+[ {
+  "id" : "RENT1",
+  "carId" : "CAR4",
+  "clientId" : "CLIENT3",
+  "startDate" : "2025-12-20",
+  "endDate" : "2025-12-23",
+  "totalPrice": 55.50
+}, {
+  "id" : "RENT2",
+  "carId" : "CAR1",
+  "clientId" : "CLIENT5",
+  "startDate" : "2025-10-04",
+  "endDate" : "2025-10-08",
+  "totalPrice" : 102.00
+} ]
