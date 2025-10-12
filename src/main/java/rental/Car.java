@@ -43,7 +43,7 @@ public class Car extends DataItem {
     public double getPricePerDay() {return pricePerDay;}
 
     public boolean isAvailable(LocalDate startDate, LocalDate endDate) {
-        if (rentals == null) return true;
+        if (rentals == null||rentals.isEmpty()) return true;
 
         for (Rental rental : rentals) {
             //Перевірка на конфлікт дат

@@ -12,7 +12,10 @@ public class RentalGUI {
     public RentalGUI() {
         rentalService = new RentalService();
         initialize();
-        showLoginDialog();
+        boolean unauthorized = true;
+        while (unauthorized) {
+            unauthorized = showLoginDialog();
+        }
     }
 
     private void initialize() {
@@ -55,7 +58,7 @@ public class RentalGUI {
         mainFrame.add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    private void showLoginDialog() {
+    private boolean showLoginDialog() {
         JPasswordField passwordField = new JPasswordField();
         Object[] message = {
                 "Введіть пароль:",
@@ -71,13 +74,15 @@ public class RentalGUI {
             String password = new String(passwordField.getPassword());
             if ("supersecretpasswordalsoknownasssp".equals(password)) {
                 mainFrame.setVisible(true);
+                return false;
             } else {
                 JOptionPane.showMessageDialog(null, "Невірний пароль!", "Помилка", JOptionPane.ERROR_MESSAGE);
-                System.exit(0);
+                return true;
             }
         } else {
             System.exit(0);
         }
+        return true;
     }
 
     public static void main(String[] args) {
