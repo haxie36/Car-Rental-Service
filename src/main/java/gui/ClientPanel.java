@@ -60,7 +60,7 @@ public class ClientPanel extends JPanel {
         idField = new JTextField();
         inputPanel.add(idField);
 
-        inputPanel.add(new JLabel("Ім'я:"));
+        inputPanel.add(new JLabel("ПІБ:"));
         nameField = new JTextField();
         inputPanel.add(nameField);
 
