@@ -114,7 +114,7 @@ public class ClientPanel extends JPanel {
     private String getLastClientInfo() {
         List<Client> clients = rentalService.findAllClients();
         if (!clients.isEmpty()) {
-            Client lastClient = clients.get(clients.size() - 1);
+            Client lastClient = clients.getLast();
             return formatClientInfo(lastClient);
         }
         return "Інформація недоступна";

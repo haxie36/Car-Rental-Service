@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RentalService {
-    final static String toEndItAll ="(Якщо ви бажаєте зупинити процес вводу, нічого не вводьте та нажміть Enter)";
     private final DataBase dataBase = DataBase.getInstance();
 
     public RentalService(){}
@@ -144,7 +143,7 @@ public class RentalService {
         }
 
         //Основна частина
-        Rental longest = dataBase.getRentals().get(0);
+        Rental longest = dataBase.getRentals().getFirst();
         for (Rental rental : dataBase.getRentals()) {
             if (rental.totalDays() > longest.totalDays()) {
                 longest = rental;
@@ -258,7 +257,6 @@ public class RentalService {
     public List<Rental> findAllRentalsByCarId(String carId) {
         return dataBase.findAllRentalsByCarId(carId);
     }
-
     public void removeAllRentalsOfClient(String id){
         dataBase.removeAllRentalsOfClient(id);
     }
@@ -266,4 +264,5 @@ public class RentalService {
         dataBase.removeAllCarRentals(carId);
     }
 
+    public void reloadData(){dataBase.loadData();}
 }

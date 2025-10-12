@@ -121,7 +121,7 @@ public class RentalPanel extends JPanel {
     private String getLastRentalInfo() {
         if (!rentalService.findAllRentals().isEmpty()) {
             List<Rental> rentals = rentalService.findAllRentals();
-            Rental lastRental = rentals.get(rentals.size() - 1);
+            Rental lastRental = rentals.getLast();
             return formatRentalInfo(lastRental);
         }
         return "Інформація недоступна";

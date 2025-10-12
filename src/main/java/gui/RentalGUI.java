@@ -1,7 +1,6 @@
 package gui;
 
 import rental.RentalService;
-import rental.DataBase;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +8,6 @@ import java.awt.*;
 public class RentalGUI {
     private final RentalService rentalService;
     private JFrame mainFrame;
-    private final DataBase dataBase = DataBase.getInstance();
 
     public RentalGUI() {
         rentalService = new RentalService();
@@ -42,7 +40,7 @@ public class RentalGUI {
         //Кнопка перезавантаження БД
         JButton reloadButton = new JButton("Перезавантажити БД");
         reloadButton.addActionListener(e -> {
-            dataBase.loadData();
+            rentalService.reloadData();
             JOptionPane.showMessageDialog(mainFrame, "Базу даних перезавантажено!");
         });
 
