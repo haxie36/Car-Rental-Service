@@ -32,7 +32,7 @@ public class AddClientDialog extends JDialog {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         //Поля вводу
-        mainPanel.add(new JLabel("Ім'я:"));
+        mainPanel.add(new JLabel("ПІБ:"));
         nameField = new JTextField();
         mainPanel.add(nameField);
 

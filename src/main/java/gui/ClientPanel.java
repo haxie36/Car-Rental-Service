@@ -223,7 +223,7 @@ public class ClientPanel extends JPanel {
 
     private String formatClientInfo(Client client) {
         return "ID: " + client.getId() + "\n" +
-                "Ім'я: " + client.getName() + "\n" +
+                "ПІБ: " + client.getName() + "\n" +
                 "Телефон: " + client.getPhone() + "\n" +
                 "Кількість оренд: " + client.getRentalCount() + "\n" +
                 "Активні оренди: " + (client.hasActiveRentals() ? "Так" : "Ні");
