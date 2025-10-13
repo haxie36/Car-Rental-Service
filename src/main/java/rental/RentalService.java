@@ -174,13 +174,13 @@ public class RentalService {
             if (car == null || client == null) {
                 return false;
             }
-
             if (!car.isAvailable(startDate, endDate)) {
                 return false;
             }
 
             String id = generateRentalId();
             Rental rental = new Rental(id, carId, clientId, startDate, endDate);
+            rental.setTotalPrice(car.getPricePerDay()*rental.totalDays());
 
             car.addRental(rental);
             rental.setCar(car);

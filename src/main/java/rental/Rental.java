@@ -94,6 +94,7 @@ public class Rental extends DataItem {
                 ", clientId='" + clientId + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", totalPrice=" + totalPrice +
                 '}';
     }
 }
