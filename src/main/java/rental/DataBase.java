@@ -18,8 +18,6 @@ final class DataBase {
         enable(SerializationFeature.INDENT_OUTPUT); //Додає перенесення рядків та відступи
         registerModule(new JavaTimeModule()); //Для роботи з LocalDate
         disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
     }};
 
     private List<Client> clients= new ArrayList<>();
@@ -312,17 +310,17 @@ final class DataBase {
             }
         }
 
-        //Видаляємо посилання на оренди з машин
+        //Видалення посилання на оренди з машин
         for (Rental rental : rentalsToRemove) {
             if (rental.getCar() != null) {
                 rental.getCar().removeRental(rental);
             }
         }
 
-        //Видаляємо оренди з головного списку
+        //Видалення оренди з головного списку
         rentals.removeAll(rentalsToRemove);
 
-        //Видаляємо клієнта
+        //Видалення клієнта
         clients.remove(client);
         saveData();
     }

@@ -193,20 +193,6 @@ public class RentalService {
         }
     }
 
-    public List<Car> findAllCars() {
-        return new ArrayList<>(dataBase.getCars());
-    }
-
-    //Отримати всіх клієнтів
-    public List<Client> findAllClients() {
-        return new ArrayList<>(dataBase.getClients());
-    }
-
-    //Отримати всі оренди
-    public List<Rental> findAllRentals() {
-        return new ArrayList<>(dataBase.getRentals());
-    }
-
     //Знайти доступні автомобілі на дати
     public List<Car> findAvailableCars(LocalDate startDate, LocalDate endDate) {
         return dataBase.findAvailableCars(startDate, endDate);
@@ -273,9 +259,22 @@ public class RentalService {
         dataBase.saveData();
     }
 
-    public void reloadData(){dataBase.loadData();}
-
     //CRUD методи з DataBase
+
+    //Отримати всіх автівок
+    public List<Car> findAllCars() {
+        return new ArrayList<>(dataBase.getCars());
+    }
+
+    //Отримати всіх клієнтів
+    public List<Client> findAllClients() {
+        return new ArrayList<>(dataBase.getClients());
+    }
+
+    //Отримати всі оренди
+    public List<Rental> findAllRentals() {
+        return new ArrayList<>(dataBase.getRentals());
+    }
 
     //Пошук користувачів різними методами
     public Client findClient(String clientId){
@@ -310,4 +309,6 @@ public class RentalService {
     public void removeRental(String id){
         dataBase.removeRental(id);
     }
+
+    public void reloadData(){dataBase.loadData();}
 }
