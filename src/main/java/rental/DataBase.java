@@ -182,14 +182,12 @@ public final class DataBase {
     //Додавання автівки
     public void addCar(Car car){
         cars.add(car);
-        System.out.println("Успішно додано автівку!");
         saveData();
     }
 
     //Додавання оренди
     public void addRental(Rental rental){
         rentals.add(rental);
-        System.out.println("Успішно додано оренду!");
         saveData();
     }
     
