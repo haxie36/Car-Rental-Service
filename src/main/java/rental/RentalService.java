@@ -212,6 +212,69 @@ public class RentalService {
         return dataBase.findAvailableCars(startDate, endDate);
     }
 
+    //Пошук всіх оренд клієнта за ID
+    public List<Rental> findAllRentalsByClientId(String clientId) {
+        if (dataBase.getRentals().isEmpty()) {
+            System.out.println("Немає оренд!");
+            return new ArrayList<>();
+        }
+
+        return findClient(clientId).getRentals();
+    }
+
+    //Пошук всіх оренд автівки за ID
+    public List<Rental> findAllRentalsByCarId(String carId) {
+        //Перевірка на наявність даних
+        if (dataBase.getRentals().isEmpty()) {
+            System.out.println("Немає оренд!");
+            return new ArrayList<>();
+        }
+
+        //Основна частина
+        List<Rental> carRentals = new ArrayList<>();
+        for (Rental rental : dataBase.getRentals()) {
+            if (rental.getCarId().equals(carId)) {
+                carRentals.add(rental);
+            }
+        }
+        return carRentals;
+    }
+
+    //Видалення всіх оренд клієнта за ID
+    public void removeAllRentalsOfClient(String id){
+        Client client = findClient(id);
+        if (client == null) {return;}
+        List<Rental> clientRentals = client.getRentals();
+        for (Rental rental : clientRentals) {
+            rental.getCar().removeRental(rental);
+        }
+        client.getRentals().clear();
+        client.getRentalIds().clear();
+        dataBase.getRentals().removeAll(clientRentals);
+        dataBase.saveData();
+    }
+
+    //Видалення всіх оренд автівки за ID
+    public void removeAllCarRentals(String carId) {
+        Car car = findCar(carId);
+        if (car == null) {
+            return;
+        }
+
+        List<Rental> carRentals = new ArrayList<>(findAllRentalsByCarId(carId));
+
+        for (Rental rental : carRentals) {
+            if (rental.getClient() != null) {
+                rental.getClient().removeRental(rental);
+            }
+            dataBase.removeRental(rental);
+        }
+        car.getRentals().clear();
+        dataBase.saveData();
+    }
+
+    public void reloadData(){dataBase.loadData();}
+
     //CRUD методи з DataBase
 
     //Пошук користувачів різними методами
@@ -247,22 +310,4 @@ public class RentalService {
     public void removeRental(String id){
         dataBase.removeRental(id);
     }
-
-    //Пошук всіх оренд клієнта за ID
-    public List<Rental> findAllRentalsByClientId(String clientId) {
-        return dataBase.findAllRentalsByClientId(clientId);
-    }
-
-    //Пошук всіх оренд автівки за ID
-    public List<Rental> findAllRentalsByCarId(String carId) {
-        return dataBase.findAllRentalsByCarId(carId);
-    }
-    public void removeAllRentalsOfClient(String id){
-        dataBase.removeAllRentalsOfClient(id);
-    }
-    public void removeAllCarRentals(String carId) {
-        dataBase.removeAllCarRentals(carId);
-    }
-
-    public void reloadData(){dataBase.loadData();}
 }

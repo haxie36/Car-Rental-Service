@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class DataBase {
+final class DataBase {
     private static DataBase instance; //Singleton pattern
     private final ObjectMapper mapper = new ObjectMapper() {{
         enable(SerializationFeature.INDENT_OUTPUT); //Додає перенесення рядків та відступи
@@ -135,7 +135,7 @@ public final class DataBase {
 
     //Збереження відповідно
     public void saveData(){
-        //Створіть директорію, якщо її немає
+        //Створить директорію, якщо її немає
         new File("src/data").mkdirs();
 
         //Збереження користувачів
@@ -410,65 +410,5 @@ public final class DataBase {
 
         Rental rental = findRental(id);
         removeRental(rental);
-    }
-
-    //==============================ВИДАЛЕННЯ ОРЕНД ...===========================
-
-    //Пошук всіх оренд клієнта за ID
-    public List<Rental> findAllRentalsByClientId(String clientId) {
-        if (rentals.isEmpty()) {
-            System.out.println("Немає оренд!");
-            return new ArrayList<>();
-        }
-
-        return findClient(clientId).getRentals();
-    }
-
-    //Пошук всіх оренд автівки за ID
-    public List<Rental> findAllRentalsByCarId(String carId) {
-        //Перевірка на наявність даних
-        if (rentals.isEmpty()) {
-            System.out.println("Немає оренд!");
-            return new ArrayList<>();
-        }
-
-        //Основна частина
-        List<Rental> carRentals = new ArrayList<>();
-        for (Rental rental : rentals) {
-            if (rental.getCarId().equals(carId)) {
-                carRentals.add(rental);
-            }
-        }
-        return carRentals;
-    }
-
-    public void removeAllRentalsOfClient(String id){
-        Client client = findClient(id);
-        if (client == null) {return;}
-        List<Rental> clientRentals = client.getRentals();
-        for (Rental rental : clientRentals) {
-            rental.getCar().removeRental(rental);
-        }
-        client.getRentals().clear();
-        client.getRentalIds().clear();
-        rentals.removeAll(clientRentals);
-        saveData();
-    }
-    public void removeAllCarRentals(String carId) {
-        Car car = findCar(carId);
-        if (car == null) {
-            return;
-        }
-
-        List<Rental> carRentals = new ArrayList<>(findAllRentalsByCarId(carId));
-
-        for (Rental rental : carRentals) {
-            if (rental.getClient() != null) {
-                rental.getClient().removeRental(rental);
-            }
-            rentals.remove(rental);
-        }
-        car.getRentals().clear();
-        saveData();
     }
 }

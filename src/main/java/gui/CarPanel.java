@@ -103,7 +103,7 @@ public class CarPanel extends JPanel {
     private String getLastCarInfo() {
         List<Car> cars = rentalService.findAllCars();
         if (!cars.isEmpty()) {
-            Car lastCar = cars.get(cars.size() - 1);
+            Car lastCar = cars.getLast();
             return formatCarInfo(lastCar);
         }
         return "Інформація недоступна";
