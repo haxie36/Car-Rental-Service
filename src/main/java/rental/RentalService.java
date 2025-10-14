@@ -184,8 +184,10 @@ public class RentalService {
 
             car.addRental(rental);
             rental.setCar(car);
+
             client.addRental(rental);
             rental.setClient(client);
+
             dataBase.addRental(rental);
             return true;
         } catch (Exception e) {

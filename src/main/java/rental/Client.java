@@ -61,8 +61,8 @@ public class Client extends DataItem {
 
     public void addRental(Rental rental) {
         if (!rentalIds.contains(rental.getId())) {
-            this.rentalIds.add(rental.getId());
-            this.rentals.add(rental);
+            rentalIds.add(rental.getId());
+            rentals.add(rental);
         }
     }
     public void removeRental(Rental rental) {
@@ -70,13 +70,12 @@ public class Client extends DataItem {
         rentals.remove(rental);
     }
 
-    public void updateRentalReferences(List<Rental> rentals) {
+    public void updateRentalReferences(List<Rental> allRentals) {
         this.rentals.clear();
-        rentalIds.clear();
-        for (Rental rental : rentals){
+        this.rentalIds.clear();
+        for (Rental rental : allRentals){
             if (rental.getClientId() != null && rental.getClientId().equals(this.id)) {
                 addRental(rental);
-                break;
             }
         }
     }

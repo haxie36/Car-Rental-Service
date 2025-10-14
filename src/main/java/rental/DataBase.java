@@ -78,11 +78,6 @@ final class DataBase {
 
     //Синхронізація посилань між класами
     public void syncReferences(){
-        //Очищення посилань для всіх клієнтів та авто
-        for (Client client : clients) {
-            client.getRentals().clear();
-            client.getRentalIds().clear();
-        }
         for (Car car : cars) {
             car.setRentals(new ArrayList<>());
         }

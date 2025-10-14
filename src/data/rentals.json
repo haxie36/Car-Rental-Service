@@ -19,4 +19,11 @@
   "startDate" : "2025-10-14",
   "endDate" : "2025-11-14",
   "totalPrice" : 573.5
+}, {
+  "id" : "RENT4",
+  "carId" : "CAR4",
+  "clientId" : "CLIENT1",
+  "startDate" : "2025-10-08",
+  "endDate" : "2025-10-09",
+  "totalPrice" : 18.5
 } ]
