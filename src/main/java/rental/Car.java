@@ -34,6 +34,7 @@ public class Car extends DataItem {
         this.pricePerDay = pricePerDay;
     }
 
+    //Гетери та сетери
     @Override
     public String getId() {return id;}
     public String getBrand() {return brand;}
@@ -41,7 +42,13 @@ public class Car extends DataItem {
     public int getYear() {return year;}
     public int getMileage() {return mileage;}
     public double getPricePerDay() {return pricePerDay;}
+    public void setMileage(int mileage) {this.mileage = mileage;}
+    @JsonIgnore
+    public List<Rental> getRentals() {return rentals;}
+    @JsonIgnore
+    public void setRentals(List<Rental> rentals) {this.rentals = rentals;}
 
+    //Чи є автівка вільною на проміжку часу
     public boolean isAvailable(LocalDate startDate, LocalDate endDate) {
         if (rentals == null||rentals.isEmpty()) return true;
 
@@ -59,11 +66,7 @@ public class Car extends DataItem {
         return !(end1.isBefore(start2) || start1.isAfter(end2));
     }
 
-    public void setMileage(int mileage) {this.mileage = mileage;}
-    @JsonIgnore
-    public List<Rental> getRentals() {return rentals;}
-    @JsonIgnore
-    public void setRentals(List<Rental> rentals) {this.rentals = rentals;}
+    //Додавання та видалення оренди
     public void addRental(Rental rental){rentals.add(rental);}
     public void removeRental(Rental rental){rentals.remove(rental);}
 

@@ -20,6 +20,7 @@ public class ReportsPanel extends JPanel {
         initialize();
     }
 
+    //Створення самої вкладки
     private void initialize() {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -38,6 +39,7 @@ public class ReportsPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    //Створення панелі з кнопками
     private JPanel createControlPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -84,6 +86,8 @@ public class ReportsPanel extends JPanel {
         return panel;
     }
 
+
+    //Допоміжний метод, що форматує кнопки
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -92,6 +96,7 @@ public class ReportsPanel extends JPanel {
         return button;
     }
 
+    //Створення вікна для вводу дати, за якою буде знайдено активні оренди на цю дату
     private void showRentalsOnDateDialog() {
         JTextField dateField = new JTextField(LocalDate.now().toString());
 
@@ -99,13 +104,14 @@ public class ReportsPanel extends JPanel {
                 "Введіть дату (YYYY-MM-DD):", dateField
         };
 
+        //Вікно вводу
         int option = JOptionPane.showConfirmDialog(
                 this, message, "Кількість оренд на дату",
                 JOptionPane.OK_CANCEL_OPTION
         );
 
         if (option == JOptionPane.OK_OPTION) {
-            try {
+            try { //Пошук та вивід інформації на екран
                 LocalDate date = LocalDate.parse(dateField.getText());
                 int count = rentalService.rentalsOn(date);
 
@@ -114,7 +120,7 @@ public class ReportsPanel extends JPanel {
                 sb.append("Дата: ").append(date).append("\n");
                 sb.append("Кількість активних оренд: ").append(count).append("\n\n");
 
-                //Додаємо інформацію про оренди на цю дату
+                //Додавання інформації про оренди на дату
                 List<Rental> allRentals = rentalService.findAllRentals();
                 int activeCount = 0;
                 for (Rental rental : allRentals) {
@@ -133,6 +139,7 @@ public class ReportsPanel extends JPanel {
         }
     }
 
+    //Середня ціна оренд
     private void showAverageRentalPrice() {
         double average = rentalService.averageRentalPrice();
 
@@ -151,9 +158,11 @@ public class ReportsPanel extends JPanel {
             sb.append("Всього оренд: ").append(rentals.size());
         }
 
+        //Вивід
         showOutput(sb.toString());
     }
 
+    //Автівка з найбільшим пробігом
     private void showCarWithHighestMileage() {
         Car car = rentalService.carWithHighestMileage();
 
@@ -163,7 +172,7 @@ public class ReportsPanel extends JPanel {
         if (car != null) {
             sb.append(formatCarInfo(car));
 
-            //Додаємо інформацію про оренди цього авто
+            //Додавання інформації про оренди авто
             List<Rental> carRentals = rentalService.findAllRentalsByCarId(car.getId());
             if (!carRentals.isEmpty()) {
                 sb.append("\n\nІсторія оренд:\n");
@@ -178,9 +187,11 @@ public class ReportsPanel extends JPanel {
             sb.append("Не вдалося знайти автомобіль з пробігом.");
         }
 
+        //Вивід
         showOutput(sb.toString());
     }
 
+    //Інформація про клієнта з найбільшою кількістю оренд
     private void showClientWithMostRentals() {
         Client client = rentalService.clientWithMostRentals();
 
@@ -190,7 +201,7 @@ public class ReportsPanel extends JPanel {
         if (client != null) {
             sb.append(formatClientInfo(client));
 
-            //Додаємо інформацію про оренди цього клієнта
+            //Додавання інформації про оренди клієнта
             List<Rental> clientRentals = rentalService.findAllRentalsByClientId(client.getId());
             if (!clientRentals.isEmpty()) {
                 sb.append("\n\nІсторія оренд:\n");
@@ -204,9 +215,11 @@ public class ReportsPanel extends JPanel {
             sb.append("Не вдалося знайти клієнта з орендами.");
         }
 
+        //Вивід
         showOutput(sb.toString());
     }
 
+    //Найдовша оренда
     private void showLongestRental() {
         Rental rental = rentalService.longestRental();
 
@@ -219,9 +232,11 @@ public class ReportsPanel extends JPanel {
             sb.append("Не вдалося знайти оренду.");
         }
 
+        //Вивід
         showOutput(sb.toString());
     }
 
+    //Інформація про усі оренди, автівки та клієнтів
     private void showAllData() {
         StringBuilder sb = new StringBuilder();
         sb.append("=== ПОВНИЙ ЗВІТ ПО СИСТЕМІ ===\n\n");
@@ -258,6 +273,7 @@ public class ReportsPanel extends JPanel {
         showOutput(sb.toString());
     }
 
+    //Інформація про заробіток
     private void showFinancialReport() {
         List<Rental> rentals = rentalService.findAllRentals();
 
@@ -277,6 +293,7 @@ public class ReportsPanel extends JPanel {
         showOutput(sb.toString());
     }
 
+    //Інформація про усі активні (насьогодні) оренди
     private void showActiveRentals() {
         List<Rental> rentals = rentalService.findAllRentals();
 

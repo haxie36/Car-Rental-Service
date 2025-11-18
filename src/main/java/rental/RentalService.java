@@ -9,48 +9,52 @@ public class RentalService {
 
     public RentalService(){}
 
+    //Перевірка на валідність Id
     public static boolean isValidCarId(String carId) {return carId != null && !carId.trim().isEmpty();}
     public static boolean isValidClientId(String clientId) {return clientId != null && !clientId.trim().isEmpty();}
 
+    //Створення Id клієнта
     private String generateClientId() {
         int maxId = 0;
         for (Client client : dataBase.getClients()) {
             if (client.getId().startsWith("CLIENT")) {
-                try {
+                try { //Отримання найбільшого номера Id
                     int idNum = Integer.parseInt(client.getId().substring(6));
                     if (idNum > maxId) maxId = idNum;
                 } catch (NumberFormatException e) {
-                    //Ігноруємо неправильні ID
+                    //Ігноруємо неправильні Id
                 }
             }
         }
         return "CLIENT" + (maxId + 1);
     }
 
+    //Створення Id автівки
     private String generateCarId() {
         int maxId = 0;
         for (Car car : dataBase.getCars()) {
             if (car.getId().startsWith("CAR")) {
-                try {
+                try { //Отримання найбільшого номера Id
                     int idNum = Integer.parseInt(car.getId().substring(3));
                     if (idNum > maxId) maxId = idNum;
                 } catch (NumberFormatException e) {
-                    //Ігноруємо неправильні ID
+                    //Ігноруємо неправильні Id
                 }
             }
         }
         return "CAR" + (maxId + 1);
     }
 
+    //Створення Id оренди
     private String generateRentalId() {
         int maxId = 0;
         for (Rental rental : dataBase.getRentals()) {
             if (rental.getId().startsWith("RENT")) {
-                try {
+                try { //Отримання найбільшого номера Id
                     int idNum = Integer.parseInt(rental.getId().substring(4));
                     if (idNum > maxId) maxId = idNum;
                 } catch (NumberFormatException e) {
-                    //Ігноруємо неправильні ID
+                    //Ігноруємо неправильні Id
                 }
             }
         }
@@ -70,7 +74,7 @@ public class RentalService {
         for (Rental rental : dataBase.getRentals()) {
             LocalDate startDate = rental.getStartDate();
             LocalDate endDate = rental.getEndDate();
-            //Перевірка на те, чи є дата між датою початку та кінця деякої оренди
+            //Перевірка на те, чи належить вхідна дата проміжку активності деякої оренди
             if ((date.equals(startDate) || date.isAfter(startDate)) && (date.equals(endDate) || date.isBefore(endDate))) {
                 count++;
             }
@@ -154,9 +158,11 @@ public class RentalService {
 
     //====================================ДЛЯ GUI==================================
     //Додавання клієнта
-    public void addClientDirect(String name, String phone) {
+    public boolean addClientDirect(String name, String phone) {
         String id = generateClientId();
+        if (dataBase.findClient(name, phone) != null) { return false; }
         dataBase.addClient(new Client(id,name,phone));
+        return true;
     }
 
     //Додавання авто
@@ -168,6 +174,7 @@ public class RentalService {
     //Додавання оренди
     public boolean addRentalDirect(String carId, String clientId, LocalDate startDate, LocalDate endDate) {
         try {
+            //Отримання автівки та клієнта за Id
             Car car = dataBase.findCar(carId);
             Client client = dataBase.findClient(clientId);
 
@@ -182,12 +189,13 @@ public class RentalService {
             Rental rental = new Rental(id, carId, clientId, startDate, endDate);
             rental.setTotalPrice(car.getPricePerDay()*rental.totalDays());
 
+            //Додавання посилань між об'єктами
             car.addRental(rental);
             rental.setCar(car);
-
             client.addRental(rental);
             rental.setClient(client);
 
+            //Додавання оренди до бази даних
             dataBase.addRental(rental);
             return true;
         } catch (Exception e) {

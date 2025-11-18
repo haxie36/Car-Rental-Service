@@ -18,6 +18,7 @@ public class RentalGUI {
         }
     }
 
+    //Створення вікна програми з усіма вкладками
     private void initialize() {
         mainFrame = new JFrame("Система для обліку оренди авто");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,6 +59,7 @@ public class RentalGUI {
         mainFrame.add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    //Створення вікна логіну
     private boolean showLoginDialog() {
         JPasswordField passwordField = new JPasswordField();
         Object[] message = {

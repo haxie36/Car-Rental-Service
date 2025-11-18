@@ -19,6 +19,7 @@ public class CarPanel extends JPanel {
         initialize();
     }
 
+    //Створення самої вкладки
     private void initialize() {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -37,6 +38,7 @@ public class CarPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    //Створення панелі з кнопками
     private JPanel createControlPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -84,6 +86,7 @@ public class CarPanel extends JPanel {
         return panel;
     }
 
+    //Допоміжний метод, що форматує кнопки
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -92,6 +95,7 @@ public class CarPanel extends JPanel {
         return button;
     }
 
+    //Створення вікна додавання автівки
     private void showAddCarDialog() {
         AddCarDialog dialog = new AddCarDialog(rentalService);
         dialog.setVisible(true);
@@ -100,6 +104,7 @@ public class CarPanel extends JPanel {
         }
     }
 
+    //Отримання інформації про останню додану автівку
     private String getLastCarInfo() {
         List<Car> cars = rentalService.findAllCars();
         if (!cars.isEmpty()) {
@@ -109,6 +114,7 @@ public class CarPanel extends JPanel {
         return "Інформація недоступна";
     }
 
+    //Видалення автівки
     private void removeCar() {
         String carId = idField.getText().trim();
         if (carId.isEmpty()) {
@@ -116,7 +122,7 @@ public class CarPanel extends JPanel {
             return;
         }
 
-        try {
+        try { //Основна частина
             rentalService.removeCar(carId);
             showOutput("Автомобіль успішно видалено!");
             clearFields();
@@ -125,6 +131,7 @@ public class CarPanel extends JPanel {
         }
     }
 
+    //Пошук автівки за Id
     private void findCarById() {
         String carId = idField.getText().trim();
         if (carId.isEmpty()) {
@@ -132,6 +139,7 @@ public class CarPanel extends JPanel {
             return;
         }
 
+        //Отримання автівки та вивід інформації на екран
         Car car = rentalService.findCar(carId);
         if (car != null) {
             showOutput("Знайдено автомобіль:\n" + formatCarInfo(car));
@@ -140,6 +148,7 @@ public class CarPanel extends JPanel {
         }
     }
 
+    //Вивід інформації про всі автівки на екран
     private void listAllCars() {
         List<Car> cars = rentalService.findAllCars();
         if (cars != null && !cars.isEmpty()) {
@@ -157,6 +166,7 @@ public class CarPanel extends JPanel {
         }
     }
 
+    //Пошук доступних автівок на проміжку часу
     private void showAvailableCarsDialog() {
         JTextField startDateField = new JTextField();
         JTextField endDateField = new JTextField();
@@ -166,13 +176,14 @@ public class CarPanel extends JPanel {
                 "Дата кінця (YYYY-MM-DD):", endDateField
         };
 
+        //Введення дат
         int option = JOptionPane.showConfirmDialog(
                 this, message, "Пошук доступних автомобілів",
                 JOptionPane.OK_CANCEL_OPTION
         );
 
         if (option == JOptionPane.OK_OPTION) {
-            try {
+            try { //Отримання дат та пошук автівок
                 LocalDate startDate = LocalDate.parse(startDateField.getText());
                 LocalDate endDate = LocalDate.parse(endDateField.getText());
 
@@ -185,6 +196,7 @@ public class CarPanel extends JPanel {
         }
     }
 
+    //Вивід на екран доступних автівок на деякі дати
     private void displayAvailableCars(List<Car> cars, LocalDate startDate, LocalDate endDate) {
         if (cars != null && !cars.isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -209,6 +221,7 @@ public class CarPanel extends JPanel {
         }
     }
 
+    //Форматування інформації про автівку
     private String formatCarInfo(Car car) {
         return "ID: " + car.getId() + "\n" +
                 "Марка: " + car.getBrand() + "\n" +
@@ -218,10 +231,12 @@ public class CarPanel extends JPanel {
                 "Ціна за день: " + car.getPricePerDay() + " грн\n";
     }
 
+    //Вивід тексту на екран (поле виводу)
     private void showOutput(String text) {
         outputTextArea.setText(text);
     }
 
+    //Очищення полів вводу
     private void clearFields() {
         idField.setText("");
     }

@@ -45,15 +45,17 @@ public class Rental extends DataItem {
         this.endDate = endDate;
     }
 
+    //Кількість днів від початку до кінця
     public long totalDays(){return ChronoUnit.DAYS.between(startDate,endDate);}
 
-    @JsonIgnore
+    @JsonIgnore //Чи є оренда активною сьогодні
     public boolean isActive(){
         LocalDate today = LocalDate.now();
         return (today.isEqual(startDate) || today.isAfter(startDate)) &&
                 (today.isEqual(endDate) || today.isBefore(endDate));
     }
 
+    //Гетери та сетери
     @Override
     public String getId() {return id;}
     public String getCarId() {return carId;}

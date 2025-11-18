@@ -19,6 +19,7 @@ public class AddCarDialog extends JDialog {
         initialize();
     }
 
+    //Створення самого вікна
     private void initialize() {
         setTitle("Додати новий автомобіль");
         setModal(true);
@@ -84,6 +85,7 @@ public class AddCarDialog extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    //Перевірка вводу та додавання автівки
     private void addCar() {
         try {
             String brand = brandField.getText().trim();

@@ -20,6 +20,7 @@ public class AddClientDialog extends JDialog {
         initialize();
     }
 
+    //Створення самого вікна
     private void initialize() {
         setTitle("Додати нового клієнта");
         setModal(true);
@@ -73,6 +74,7 @@ public class AddClientDialog extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    //Перевірка вводу та додавання клієнта
     private void addClient() {
         String name = nameField.getText().trim();
         String phone = phoneField.getText().trim();
@@ -84,15 +86,16 @@ public class AddClientDialog extends JDialog {
         }
 
         //Перевірка формату телефону (базова)
-        if (!phone.matches("\\+?[0-9\\-()\\s]+")) {
+        if (!phone.matches("\\+?[0-9\\-()\\s]+")&&(phone.length()<10||phone.length()>17)) {
             statusLabel.setText("Невірний формат телефону!");
             statusLabel.setForeground(Color.RED);
             return;
         }
 
         try {
-            rentalService.addClientDirect(name, phone);
-            success = true;
+            if(rentalService.addClientDirect(name, phone)) {
+                success = true;
+            }
             dispose();
         } catch (Exception ex) {
             statusLabel.setText("Помилка: " + ex.getMessage());

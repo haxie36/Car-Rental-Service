@@ -50,6 +50,7 @@ public class Client extends DataItem {
     public List<Rental> getRentals() {return rentals;}
     public List<String> getRentalIds() {return rentalIds;}
 
+    //Перевірка того, чи має клієнт хоча б 1 оренду
     public boolean hasActiveRentals() {
         for (Rental rental : rentals) {
             if (rental.isActive()) {
@@ -59,28 +60,31 @@ public class Client extends DataItem {
         return false;
     }
 
+    //Додавання оренди
     public void addRental(Rental rental) {
         if (!rentalIds.contains(rental.getId())) {
-            rentalIds.add(rental.getId());
-            rentals.add(rental);
+            rentalIds.add(rental.getId()); //Додавання Id
+            rentals.add(rental); //Додавання оренди
         }
     }
+    //Видалення оренди
     public void removeRental(Rental rental) {
-        rentalIds.remove(rental.getId());
-        rentals.remove(rental);
+        rentalIds.remove(rental.getId()); //Id
+        rentals.remove(rental); //Оренда
     }
 
+    //Додавання оренд зі списку
     public void updateRentalReferences(List<Rental> allRentals) {
-        this.rentals.clear();
-        this.rentalIds.clear();
+        this.rentals.clear(); //Очищення
+        this.rentalIds.clear(); //Очищення
         for (Rental rental : allRentals){
-            if (rental.getClientId() != null && rental.getClientId().equals(this.id)) {
-                addRental(rental);
+            if (rental.getClientId() != null && rental.getClientId().equals(this.id)) { //Якщо оренда має цього клієнта як її власника
+                addRental(rental); //Додавання
             }
         }
     }
 
-    @JsonIgnore
+    @JsonIgnore //Кількість оренд клієнта
     public int getRentalCount(){return rentalIds.size();}
 
     //Json формат

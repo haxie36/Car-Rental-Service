@@ -23,6 +23,7 @@ public class AddRentalDialog extends JDialog {
         initialize();
     }
 
+    //Створення самого вікна
     private void initialize() {
         setTitle("Додати нову оренду");
         setModal(true);
@@ -85,6 +86,7 @@ public class AddRentalDialog extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    //Перевірка вводу та додавання оренди
     private void addRental() {
         try {
             String carId = carIdField.getText().trim();

@@ -18,6 +18,7 @@ public class RentalPanel extends JPanel {
         initialize();
     }
 
+    //Створення самої вкладки
     private void initialize() {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -36,6 +37,7 @@ public class RentalPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    //Створення панелі з кнопками
     private JPanel createControlPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -102,6 +104,7 @@ public class RentalPanel extends JPanel {
         return panel;
     }
 
+    //Допоміжний метод, що форматує кнопки
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -110,6 +113,7 @@ public class RentalPanel extends JPanel {
         return button;
     }
 
+    //Створення вікна додавання оренди
     private void showAddRentalDialog() {
         AddRentalDialog dialog = new AddRentalDialog(rentalService);
         dialog.setVisible(true);
@@ -118,6 +122,7 @@ public class RentalPanel extends JPanel {
         }
     }
 
+    //Отримання інформації про останню додану оренду
     private String getLastRentalInfo() {
         if (!rentalService.findAllRentals().isEmpty()) {
             List<Rental> rentals = rentalService.findAllRentals();
@@ -127,6 +132,7 @@ public class RentalPanel extends JPanel {
         return "Інформація недоступна";
     }
 
+    //Видалення оренди
     private void removeRental() {
         String rentalId = idField.getText().trim();
         if (rentalId.isEmpty()) {
@@ -134,7 +140,7 @@ public class RentalPanel extends JPanel {
             return;
         }
 
-        try {
+        try { //Основна частина
             rentalService.removeRental(rentalId);
             showOutput("Оренду успішно видалено!");
             clearFields();
@@ -143,6 +149,7 @@ public class RentalPanel extends JPanel {
         }
     }
 
+    //Пошук оренд клієнта за введеним у поле Id
     private void removeAllClientRentals() {
         String clientId = clientIdField.getText().trim();
         if (clientId.isEmpty()) {
@@ -150,7 +157,7 @@ public class RentalPanel extends JPanel {
             return;
         }
 
-        try {
+        try { //Основна частина
             rentalService.removeAllRentalsOfClient(clientId);
             showOutput("Усі оренди клієнта успішно видалено!");
         } catch (Exception ex) {
@@ -158,6 +165,7 @@ public class RentalPanel extends JPanel {
         }
     }
 
+    //Пошук оренд на автівку за введеним у поле Id
     private void removeAllCarRentals() {
         String carId = carIdField.getText().trim();
         if (carId.isEmpty()) {
@@ -165,7 +173,7 @@ public class RentalPanel extends JPanel {
             return;
         }
 
-        try {
+        try { //Основна частина
             rentalService.removeAllCarRentals(carId);
             showOutput("Усі оренди автомобіля успішно видалено!");
         } catch (Exception ex) {
@@ -173,6 +181,7 @@ public class RentalPanel extends JPanel {
         }
     }
 
+    //Пошук оренди за Id
     private void findRentalById() {
         String rentalId = idField.getText().trim();
         if (rentalId.isEmpty()) {
@@ -180,6 +189,7 @@ public class RentalPanel extends JPanel {
             return;
         }
 
+        //Отримання оренди та вивід інформації на екран
         Rental rental = rentalService.findRental(rentalId);
         if (rental != null) {
             showOutput("Знайдено оренду:\n" + formatRentalInfo(rental));
@@ -188,6 +198,7 @@ public class RentalPanel extends JPanel {
         }
     }
 
+    //Пошук оренд клієнта за введеним Id
     private void findClientRentals() {
         String clientId = clientIdField.getText().trim();
         if (clientId.isEmpty()) {
@@ -195,10 +206,12 @@ public class RentalPanel extends JPanel {
             return;
         }
 
+        //Отримання списку оренд та виведення інформації на екран
         List<Rental> rentals = rentalService.findAllRentalsByClientId(clientId);
         displayRentals(rentals, "клієнта " + clientId);
     }
 
+    //Пошук оренд на автівку за введеним Id
     private void findCarRentals() {
         String carId = carIdField.getText().trim();
         if (carId.isEmpty()) {
@@ -206,15 +219,18 @@ public class RentalPanel extends JPanel {
             return;
         }
 
+        //Отримання списку оренд та виведення інформації на екран
         List<Rental> rentals = rentalService.findAllRentalsByCarId(carId);
         displayRentals(rentals, "автомобіля " + carId);
     }
 
+    //Вивід на екран інформації про всі оренди
     private void listAllRentals() {
         List<Rental> allRentals = rentalService.findAllRentals();
         displayRentals(allRentals, "всіх оренд");
     }
 
+    //Форматований вивід деякого списку оренд на екран
     private void displayRentals(List<Rental> rentals, String type) {
         if (rentals != null && !rentals.isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -230,6 +246,7 @@ public class RentalPanel extends JPanel {
         }
     }
 
+    //Форматування інформації про оренду
     private String formatRentalInfo(Rental rental) {
         return "ID оренди: " + rental.getId() + "\n" +
                 "Автомобіль: " + rental.getCarId() + "\n" +
@@ -240,10 +257,12 @@ public class RentalPanel extends JPanel {
                 "Статус: " + (rental.isActive() ? "Активна" : "Завершена/запланована");
     }
 
+    //Вивід тексту на екран (поле виводу)
     private void showOutput(String text) {
         outputTextArea.setText(text);
     }
 
+    //Очищення полів вводу
     private void clearFields() {
         idField.setText("");
         carIdField.setText("");
